@@ -5,6 +5,12 @@ mackerel-plugin-aws-sqs
 mackerel-plugin-aws-sqs -queue-name <QueueName> [-region <aws_region>] [-access-key-id <id>] [-secret-access-key <key>] [-tempfile <tempfile>]
 ```
 
+## Install
+
+```
+$ mkr plugin install takyoshi/mackerel-plugin-aws-sqs
+```
+
 ## Config Example
 ```
 [plugin.metrics.aws-sqs]
