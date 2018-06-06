@@ -40,8 +40,8 @@ func (m metric) name() string {
 // GraphDefinition interface for mackerel plugin
 func (sp SQSPlugin) GraphDefinition() map[string](mp.Graphs) {
 	return map[string]mp.Graphs{
-		"sqs.messages": mp.Graphs{
-			Label: "SQS Message",
+		"messages": mp.Graphs{
+			Label: sp.QueueName + " Message",
 			Unit:  "integer",
 			Metrics: [](mp.Metrics){
 				mp.Metrics{Name: "NumberOfMessagesSent", Label: "NumberOfMessagesSent"},
@@ -50,8 +50,8 @@ func (sp SQSPlugin) GraphDefinition() map[string](mp.Graphs) {
 				mp.Metrics{Name: "NumberOfEmptyReceives", Label: "NumberOfEmptyReceives"},
 			},
 		},
-		"sqs.message_size": mp.Graphs{
-			Label: "SQS Sent Message Size",
+		"message_size": mp.Graphs{
+			Label: sp.QueueName + " Sent Message Size",
 			Unit:  "bytes",
 			Metrics: [](mp.Metrics){
 				mp.Metrics{Name: "SentMessageSizeAverage", Label: "SentMessageSizeAvg"},
@@ -59,8 +59,8 @@ func (sp SQSPlugin) GraphDefinition() map[string](mp.Graphs) {
 				mp.Metrics{Name: "SentMessageSizeMin", Label: "SentMessageSizeMin"},
 			},
 		},
-		"sqs.queue": mp.Graphs{
-			Label: "SQS Approximate Message",
+		"queue": mp.Graphs{
+			Label: sp.QueueName + " Approximate Message",
 			Unit:  "integer",
 			Metrics: [](mp.Metrics){
 				mp.Metrics{Name: "ApproximateNumberOfMessagesDelayed", Label: "ApproximateNumberOfMessagesDelayed"},
@@ -74,6 +74,9 @@ func (sp SQSPlugin) GraphDefinition() map[string](mp.Graphs) {
 
 // MetricKeyPrefix interface for mackerel plugin
 func (sp SQSPlugin) MetricKeyPrefix() string {
+	if sp.Prefix == "" {
+		return "sqs." + sp.QueueName
+	}
 	return sp.Prefix
 }
 
@@ -233,7 +236,7 @@ func main() {
 	flag.StringVar(&accessKey, "access-key-id", "", "AWS Access Key ID")
 	flag.StringVar(&queueName, "queue-name", "", "SQS Queue Name")
 	flag.StringVar(&region, "region", "us-east-1", "AWS Region")
-	flag.StringVar(&prefix, "metric-key-prefix", "sqs", "metric key prefix")
+	flag.StringVar(&prefix, "metric-key-prefix", "", "metric key prefix")
 	flag.Parse()
 
 	p := SQSPlugin{
