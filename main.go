@@ -66,6 +66,12 @@ func (sp SQSPlugin) GraphDefinition() map[string](mp.Graphs) {
 				mp.Metrics{Name: "ApproximateNumberOfMessagesDelayed", Label: "ApproximateNumberOfMessagesDelayed"},
 				mp.Metrics{Name: "ApproximateNumberOfMessagesVisible", Label: "ApproximateNumberOfMessagesVisible"},
 				mp.Metrics{Name: "ApproximateNumberOfMessagesNotVisible", Label: "ApproximateNumberOfMessagesNotVisible"},
+			},
+		},
+		"oldest_message": mp.Graphs{
+			Label: sp.QueueName + " Oldest Message",
+			Unit:  "integer",
+			Metrics: [](mp.Metrics){
 				mp.Metrics{Name: "ApproximateAgeOfOldestMessage", Label: "ApproximateAgeOfOldestMessage"},
 			},
 		},
